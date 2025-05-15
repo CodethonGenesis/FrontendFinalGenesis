@@ -1,0 +1,59 @@
+<div class="p-4 rounded-lg">
+  <swiper-container
+    #swiperContainer
+    init="false"
+    class="w-full bg-white p-5 rounded-2xl"
+  >
+    <swiper-slide *ngFor="let evento of eventos; trackBy: trackEvento">
+      <div
+        class="slide-content shadow-md px-10 my-6 bg-gray-50 p-3 rounded-lg border border-gray-200"
+      >
+        <div class="flex items-start gap-3">
+          <img
+            src="./event.jpg"
+            alt="{{ evento.name }}"
+            class="rounded-lg object-cover w-[520px] h-[320px]"
+          />
+
+          <div class="flex-1">
+            <div class="flex justify-between items-center">
+              <h3 class="font-bold text-lg text-black">{{ evento.name }}</h3>
+
+              <div
+                class="badge badge-sm md:badge-lg outline-1 font-bold text-nowrap"
+                [ngClass]="{
+                'bg-primary': evento?.estado_id === 1,
+                'bg-success': evento?.estado_id === 2,
+                'bg-info': evento?.estado_id === 3,
+                'bg-error': evento?.estado_id === 4,
+                'border-0 bg-gray-400': evento?.estado_id === 5,
+              }"
+              >
+                {{ evento?.estado_nombre || "" }}
+              </div>
+            </div>
+
+            <div class="mt-2">
+              <p class="text-sm text-gray-600">{{ evento?.nombreCategoria }}</p>
+              <p class="text-sm font-medium text-black">
+                {{ evento?.descripcion }}
+              </p>
+            </div>
+
+            <div class="flex gap-4 items-center mt-4">
+              <span class="text-sm text-gray-600"
+                >{{ evento.seguidores.length }} seguidores</span
+              >
+              <button
+                class="btn btn-primary btn-sm"
+                [routerLink]="'/main/evento/' + evento.id"
+              >
+                Ver más Información
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </swiper-slide>
+  </swiper-container>
+</div>

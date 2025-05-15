@@ -1,0 +1,90 @@
+<div class="selector">
+  <ul
+    class="flex gap-2 mb-4 p-1 glass items-center w-fit"
+    [ngClass]="{ selected: !favoritos }"
+  >
+    <li
+      class="p-3 rounded-2xl cursor-pointer"
+      [ngClass]="{ 'text-base-200': favoritos }"
+      (click)="favoritos = true"
+    >
+      Favoritos
+    </li>
+    <li
+      class="p-3 rounded-2xl cursor-pointer"
+      [ngClass]="{ ' text-base-200': !favoritos }"
+      (click)="favoritos = false"
+    >
+      Mostrar todo
+    </li>
+  </ul>
+</div>
+
+<div class="secciones flex flex-wrap w-full h-full gap-2 cursor-pointer">
+  @if(categories.length <= 0 || categories==null){
+  <div
+    class="seccion w-60 h-60 overflow-hidden rounded-md flex items-center justify-center hover:shadow-[2px_2px_4px_0px_rgba(0,_0,_0,_0.3)] transition-all duration-100 glass"
+  >
+    <h1 class="font-semibold">No hay categorias</h1>
+  </div>
+  }@else { @if(favoritos){ @for(categoria of this.favoritosCategories; track
+  categoria.id){
+
+  <div
+    class="seccion w-60 h-60 overflow-hidden rounded-md flex relative items-center justify-center hover:shadow-[2px_2px_4px_0px_rgba(0,_0,_0,_0.3)] transition-all duration-100 glass"
+    [routerLink]="'/main/seccion/' + categoria.id"
+  >
+    <h1 class="font-semibold">{{ categoria.name }}</h1>
+    <div
+      class="descripcion flex items-center justify-center transition-all absolute -translate-1/2 left-1/2 bg-base-100 w-full h-full top-1/2 p-5 rounded-md overflow-y-hidden auto overflow-x-hidden text-left"
+    >
+      <p class="text-center font-bold">
+        {{ categoria.descripcion }}
+      </p>
+    </div>
+    <button
+      class="absolute right-3 bottom-3 shadow rounded-full z-100 hover:shadow-2xl cursor-pointer p-5 bg-base-100 w-5 overflow-hidden"
+    >
+      <fa-icon
+        [icon]="faXmark"
+        class="absolute left-5 translate-[-50%] cursor-pointer text-red-500"
+      ></fa-icon>
+    </button>
+  </div>
+  } } @else { @for(categoria of this.categoryService.getCategorias(); track
+  categoria.id){
+  <div
+    class="seccion w-60 h-60 overflow-hidden rounded-md flex items-center justify-center hover:shadow-[2px_2px_4px_0px_rgba(0,_0,_0,_0.3)] transition-all duration-100 glass"
+    [routerLink]="'/main/seccion/' + categoria.id"
+  >
+    <h1 class="font-semibold">{{ categoria.name }}</h1>
+    <div
+      class="descripcion flex items-center justify-center transition-all absolute -translate-1/2 left-1/2 bg-base-100 w-full h-full top-1/2 p-5 rounded-md overflow-y-hidden auto overflow-x-hidden text-left"
+    >
+      <p class="text-center font-bold">
+        {{ categoria.descripcion }}
+      </p>
+    </div>
+    @if(categoria.isFollowedByUser){
+    <a
+      class="absolute right-3 bottom-3 shadow rounded-full z-100 hover:shadow-2xl cursor-pointer p-5 bg-base-100 w-5 overflow-hidden"
+    >
+      <fa-icon
+        [icon]="faXmark"
+        class="absolute left-5 translate-[-50%] cursor-pointer text-red-500 scale-150"
+      ></fa-icon>
+    </a>
+    }@else{
+    <a
+      class="absolute right-3 bottom-3 shadow rounded-full z-100 hover:shadow-2xl cursor-pointer p-5 bg-base-100 w-5 overflow-hidden"
+    >
+      <fa-icon
+        [icon]="faHeart"
+        class="absolute left-5 translate-[-50%] cursor-pointer text-red-500"
+      ></fa-icon>
+    </a>
+
+    }
+  </div>
+  } }}
+</div>

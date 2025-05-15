@@ -1,0 +1,98 @@
+<full-calendar
+  class="md:w-full md:mx-0"
+  [options]="calendarOptions"
+></full-calendar>
+
+<!-- Modal -->
+
+<!-- You can open the modal using ID.showModal() method -->
+
+<dialog [open]="isModalVisible" class="modal">
+  <div class="modal-box p-0 bg-base-200">
+    <!-- Botón para cerrar el modal -->
+
+    <button
+      type="button"
+      class="cursor-pointer rounded-2xl hover:bg-black/55 bg-black/65 right-4 top-4 border absolute"
+      (click)="closeModal()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        viewBox="0 0 24 24"
+      >
+        <path
+          class="group-hover:fill-zinc-400 transition-colors duration-200"
+          fill="white"
+          d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z"
+        />
+      </svg>
+    </button>
+
+    <!-- Información que queramos poner del evento -->
+
+    <div
+      class="w-full h-[25dvh] border-b bg-cover bg-center"
+      style="background-image: url('./event.jpg')"
+    >
+      <h2 class="sr-only">Imagen del evento</h2>
+    </div>
+    <div class="p-4">
+      <div class="relative flex justify-between items-center px-2">
+        <div class="card-title text-lg font-bold leading-7 text-base-content">
+          {{ eventoSeleccionado?.name || "" }}
+          <div
+            class="badge badge-sm badge-outline outline-1 font-medium bg-base-100 text-nowrap"
+            [ngClass]="{
+            'badge-primary': eventoSeleccionado?.estado_id === 1,
+            'badge-success': eventoSeleccionado?.estado_id === 2,
+            'badge-info': eventoSeleccionado?.estado_id === 3,
+            'badge-error': eventoSeleccionado?.estado_id === 4,
+            'badge-neutral bg-gray-400': eventoSeleccionado?.estado_id === 5,
+          }"
+          >
+            {{ eventoSeleccionado?.estado_nombre || "" }}
+          </div>
+        </div>
+        <div class="text-base text-base-content flex gap-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="red"
+          >
+            <path
+              d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+            />
+          </svg>
+          {{ eventoSeleccionado?.ubicacion || "" }}
+        </div>
+      </div>
+
+      <div class="relative flex gap-2 items-center p-2">
+        {{ this.variablesCompartidasService.formatDate(fechaFin) }}
+      </div>
+
+      <div class="p-2">
+        {{ eventoSeleccionado?.descripcion || "" }}
+      </div>
+
+      <div class="flex justify-center pt-4 border-t gap-2">
+        <button
+          class="btn"
+          [routerLink]="['/main/evento/', eventoSeleccionado?.id]"
+        >
+          Ver más Información
+        </button>
+        <button
+          class="btn bg-error"
+          (click)="desapuntarse(eventoSeleccionado?.id!)"
+        >
+          Desapuntarse
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>

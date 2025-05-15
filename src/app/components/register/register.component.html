@@ -1,0 +1,107 @@
+<body class="py-5">
+  <form
+    #registerForm="ngForm"
+    (ngSubmit)="onSubmit(registerForm)"
+    class="register-form p-5 rounded-xl bg-white shadow-md border-1 border-gray-200 flex flex-col grid-cols-1 gap-4 md:grid md:grid-cols-2 min-w-[300px]"
+  >
+    <!-- Required Fields -->
+    <input
+      class="input border rounded-md border-gray-300 w-full"
+      type="text"
+      name="userName"
+      [(ngModel)]="user.userName"
+      required
+      placeholder="Usuario"
+      minlength="1"
+      maxlength="50"
+    />
+
+    <input
+      class="input border rounded-md border-gray-300"
+      type="password"
+      name="password"
+      [(ngModel)]="user.password"
+      required
+      placeholder="Contraseña"
+      minlength="5"
+      maxlength="100"
+    />
+
+    <input
+      class="input border rounded-md border-gray-300"
+      type="password"
+      name="repeatPassword"
+      [(ngModel)]="repeatPassword"
+      required
+      placeholder="Repetir contraseña"
+      [ngClass]="{
+        'input-valid': isPasswordMatching(),
+        'input-invalid': !isPasswordMatching() && repeatPassword
+      }"
+    />
+
+    <!-- Optional Fields -->
+    <input
+      class="border rounded-md border-gray-300 input"
+      type="email"
+      name="email"
+      [(ngModel)]="user.email"
+      placeholder="Email"
+      email
+      maxlength="100"
+    />
+
+    <input
+      class="border rounded-md border-gray-300 input"
+      type="text"
+      name="name"
+      [(ngModel)]="user.name"
+      placeholder="Nombre"
+      maxlength="50"
+    />
+
+    <input
+      class="border rounded-md border-gray-300 input"
+      type="text"
+      name="lastName"
+      [(ngModel)]="user.lastName"
+      placeholder="Apellido"
+      maxlength="50"
+    />
+
+    <select
+      name="tipoDocument"
+      class="border rounded-md border-gray-300 select"
+      style="padding-inline: 1rem"
+    >
+      <option disabled selected class="border rounded-md border-gray-300 px-2">
+        Tipo de documento
+      </option>
+      <option value="DNI">DNI</option>
+    </select>
+
+    <input
+      type="text"
+      name="documento"
+      [(ngModel)]="user.documento"
+      placeholder="documento"
+      maxlength="20"
+      class="border rounded-md border-gray-300 input"
+    />
+
+    <div class="buttons col-span-2 flex flex-col gap-2">
+      <button
+        class="border rounded-md border-gray-300 btn btn-slide w-full"
+        type="submit"
+        [disabled]="loading"
+      >
+        Registrarse
+      </button>
+
+      <span class="self-center font-light"
+        >Ya estás registrado?
+        <a [routerLink]="['/login']" class="pt-3 font-normal">Acceder</a>
+      </span>
+    </div>
+  </form>
+</body>

@@ -1,0 +1,247 @@
+<section
+  class="w-full min-h-screen md:py-2 mx-auto text-[12px] lg:text-[14px] px-2 md:px-8 lg:px-32 xl:px-64 h-full"
+>
+  <!-- HEADER Y MAIN -->
+  <div
+    class="header-main rounded-2xl shadow-2xl border border-gray-300 bg-base-200"
+  >
+    <!-- Header del evento -->
+    <section
+      class="flex flex-col md:flex-row gap-4 md:gap-2 md:items-start pt-2 md:pt-6 justify-between px-2 md:px-6"
+    >
+      <!-- Izquierda: Foto perfil, nombre usuario creador del evento, fecha creación -->
+      <div class="flex gap-2 w-full flex-row items-center">
+        <!-- Foto de perfil -->
+        <div class="mt-1 w-10 h-10 rounded-full overflow-hidden">
+          <img
+            class="w-full h-full object-cover"
+            src="./avatar.png"
+            alt="Foto de perfil"
+          />
+        </div>
+        <!-- Categoría · Fecha creación - Usuario -->
+        <div class="flex flex-col">
+          <p>
+            <span class="font-bold">{{ evento?.nombreCategoria }}</span> ·
+            <span class="fechaCreacion">{{ evento?.fCreacion }}</span>
+          </p>
+          <p class="font-semibold">{{ evento?.userName }}</p>
+        </div>
+      </div>
+      <!-- Derecha: Botón apuntarse, plazas disponibles-->
+      <div class="flex items-end w-full flex-col gap-2">
+        @if(apuntadoEnEvento){
+        <button
+          class="btn w-[80px] text-[12px] md:w-[120px] md:text-[14px] bg-base-content text-base-200"
+          (click)="desapuntarse(evento!.id!)"
+        >
+          Desapuntarse
+        </button>
+        }@else{
+        <button
+          class="btn w-[80px] text-[12px] md:w-[120px] md:text-[14px] bg-base-content text-base-200"
+          [disabled]="evento?.seguidores?.length === evento?.limiteUsuarios"
+          (click)="apuntarse(evento!.id!)"
+        >
+          ¡Me apunto!
+        </button>
+        }
+        <p class="font-bold">
+          Plazas disponibles:
+          <span class="font-medium">
+            {{ plazasDisponibles }} / {{ evento?.limiteUsuarios }}
+          </span>
+        </p>
+      </div>
+    </section>
+    <!-- Fin Header del evento -->
+
+    <!-- Main: Contenido del evento -->
+    <section class="flex flex-col mt-2 px-2 md:px-6">
+      <div class="px-0 md:px-4">
+        <!-- Top: Título | fecha (duración), tope inscripción | descripción | etiqueta estado -->
+        <div class="flex flex-col gap-6 bg-transparent">
+          <!-- Título del evento -->
+          <div
+            class="flex border-t pt-2 md:border-t-0 border-gray-300 items-center md:justify-start justify-center sm:flex-row gap-2"
+          >
+            <h1 class="font-bold text-2xl md:text-3xl lg:text-5xl">
+              {{ evento?.name }}
+            </h1>
+            <div
+              class="badge badge-sm md:badge-lg outline-1 md:mt-2 font-bold text-nowrap"
+              [ngClass]="{
+                'bg-primary': evento?.estado_id === 1,
+                'bg-success': evento?.estado_id === 2,
+                'bg-info': evento?.estado_id === 3,
+                'bg-error': evento?.estado_id === 4,
+                'border-0 bg-gray-400': evento?.estado_id === 5,
+              }"
+            >
+              {{ evento?.estado_nombre || "" }}
+            </div>
+          </div>
+          <!-- Duración: fechaInicio horaInicio - fechaFin horaFin | Fecha tope inscripción-->
+          <div class="flex flex-col px-2 md:flex-row justify-between gap-2">
+            <!-- Inicio - fin -->
+            <div class="flex flex-col gap-2">
+              <div class="font-bold">
+                Inicio:
+                <span class="font-mono font-medium">{{
+                  this.variablesCompartidasService.formatDate(fechainicio)
+                }}</span>
+              </div>
+              <div class="font-bold">
+                Fin:
+                <span class="font-mono font-medium">{{
+                  this.variablesCompartidasService.formatDate(fechaFin)
+                }}</span>
+              </div>
+            </div>
+            <!-- Tope inscripción -->
+            <p class="font-bold">
+              Fecha tope inscripción:
+              <span class="font-mono font-medium">{{
+                this.variablesCompartidasService.formatDate(
+                  fechaTopeInscripcion
+                )
+              }}</span>
+            </p>
+          </div>
+          <!-- Descripción del evento -->
+          <div class="px-2 font-semibold">
+            <p>{{ evento?.descripcion }}</p>
+          </div>
+        </div>
+        <!-- Center: Foto del evento y ubicación-->
+        <div class="flex flex-col bg-transparent mt-5">
+          <!-- Foto del evento -->
+          <div class="mx-auto w-full">
+            <img
+              class="rounded-2xl w-full object-cover"
+              src="./event.jpg"
+              alt="Foto de perfil"
+            />
+          </div>
+          <!-- Ubicación -->
+          <p class="mt-2 px-2 flex items-center">
+            <fa-icon
+              [icon]="faLocationDot"
+              class="fa-regular text-red-500"
+              [fixedWidth]="true"
+            ></fa-icon>
+            <span class="font-bold">{{ evento?.ubicacion }}</span>
+          </p>
+        </div>
+      </div>
+      <!-- Bottom: Comentarios, likes, dislikes, compartir -->
+      <div
+        class="flex flex-row w-full px-2 md:px-4 py-2 overflow-hidden justify-end bg-transparent"
+      >
+        <div
+          class="flex items-center rounded-2xl overflow-hidden shadow-md border border-gray-800 w-max bg-base-content text-base-200"
+        >
+          <!-- Comentarios -->
+          <div
+            class="flex items-center px-2 md:px-4 py-2 hover:bg-base-100/25 cursor-pointer border-r border-gray-300 gap-2"
+          >
+            <fa-icon
+              [icon]="faMessage"
+              class="fa-regular"
+              [fixedWidth]="true"
+            ></fa-icon>
+            <p>{{ comentarios.length }}</p>
+          </div>
+          <!-- Likes -->
+          <div
+            class="flex items-center px-2 md:px-4 py-2 hover:bg-base-100/25 cursor-pointer border-r border-gray-300 gap-2"
+            (click)="likeEvent()"
+          >
+            <fa-icon [icon]="faThumbsUp" [fixedWidth]="true"></fa-icon>
+            <p>{{ evento?.likes }}</p>
+          </div>
+          <!-- Dislikes -->
+          <div
+            class="flex items-center px-2 md:px-4 py-2 border-r border-gray-300 hover:bg-base-100/25 cursor-pointer gap-2"
+            (click)="dislikeEvent()"
+          >
+            <fa-icon [icon]="faThumbsDown" [fixedWidth]="true"></fa-icon>
+            <p>{{ evento?.dislikes }}</p>
+          </div>
+          <!-- COMPARTIR -->
+          <div
+            class="flex items-center px-2 md:px-4 py-2 hover:bg-base-100/25 cursor-pointer gap-2"
+          >
+            <fa-icon
+              [icon]="faShareFromSquare"
+              class="fa-regular"
+              [fixedWidth]="true"
+            ></fa-icon>
+            <p>Compartir</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Fin del main -->
+    <section class="w-full" id="comentarios">
+      <!-- Input nuevo comentario -->
+      <div class="mx-2 my-4 md:mx-6">
+        <input
+          class="w-full input border rounded-2xl py-8 px-4"
+          type="text"
+          placeholder="Escribe un comentario..."
+        />
+      </div>
+      @for(comentario of comentarios; track comentario.id){
+      <div
+        class="flex flex-col m-4 md:m-6 p-4 border rounded-2xl shadow-md gap-2"
+      >
+        <!-- Contenido horizontal: Avatar + comentario -->
+        <div class="flex items-start gap-3">
+          <!-- Foto de perfil -->
+          <div
+            class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2"
+          >
+            <img
+              class="w-full h-full object-cover rounded-full"
+              src="./avatar.png"
+              alt="Foto de perfil"
+            />
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex flex-col gap-1 w-full">
+            <p class="text-sm">
+              <span class="font-bold">{{ comentario.autor_username }}</span>
+              <span class="text-gray-500">· {{ comentario.fecha }}</span>
+            </p>
+            <p class="text-base text-base-content">
+              {{ comentario.contenido }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Likes/Dislikes abajo -->
+        <div class="flex gap-4 items-center pl-14 text-base-content text-sm">
+          <div class="flex items-center gap-1">
+            <fa-icon
+              [icon]="faThumbsUp"
+              class="fa-regular"
+              [fixedWidth]="true"
+            ></fa-icon>
+            {{ comentario.likes }}
+          </div>
+          <div class="flex items-center gap-1">
+            <fa-icon
+              [icon]="faThumbsDown"
+              class="fa-regular"
+              [fixedWidth]="true"
+            ></fa-icon>
+            {{ comentario.dislikes }}
+          </div>
+        </div>
+      </div>
+      }
+    </section>
+  </div>
+</section>

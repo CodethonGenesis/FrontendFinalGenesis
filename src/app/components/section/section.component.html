@@ -1,0 +1,165 @@
+<section class="p-6 overflow-y-auto relative">
+  <h1 class="text-xl font-bold text-center my-6">
+    {{ this.categoryService.categoriaCargada().name }}
+  </h1>
+  <fa-icon
+    [icon]="faArrow"
+    class="search-icon cursor-pointer text-2xl absolute left-6 top-6"
+    [routerLink]="['/main/home']"
+  ></fa-icon>
+  <div
+    class="secciones p-4 flex flex-wrap w-full h-full max-h-180 gap-5 cursor-pointer overflow-y-auto"
+  >
+    <!--     @for (evento of this.categoryService.categoriaCargada().eventos; track
+    evento.id) {
+    <div
+      class="evento h-80 w-60 shadow-md flex flex-col overflow-hidden cursor-pointer hover:shadow-[2px_2px_4px_0px_rgba(0,_0,_0,_0.3)] transition-all duration-100 glass"
+      [routerLink]="['/main/evento/', evento.id]"
+    >
+      <img
+        src="https://plus.unsplash.com/premium_photo-1723291846204-4aa828a8b08a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Imagen del evento {{ evento.name }}"
+        class="w-full h-40 object-cover mb-2"
+      />
+      <div class="texto p-4">
+        <p>{{ evento.name }}</p>
+        <p>{{ evento.descripcion }}</p>
+        <p>{{ evento.ubicacion }}</p>
+      </div>
+    </div>
+    } -->
+    @for (event of this.eventos; track event.id) {
+    <div class="card w-full md:w-96 bg-base-100 shadow-xl">
+      <!-- Tarjeta con los datos de la categoría -->
+      <div class="card bg-base-100 w-full md:w-96">
+        <!-- Imagen -->
+        <figure
+          [routerLink]="'/main/evento/' + event.id"
+          class="cursor-pointer"
+        >
+          <img src="/ocio.png" alt="Foto de {{ event.name }}" />
+        </figure>
+
+        <!-- Contenido -->
+        <div class="card-body">
+          <!-- Título -->
+          <h2 class="card-title flex flex-row justify-between">
+            {{ event.name }}
+            <div
+              class="badge badge-lg outline-1 mt-2 font-bold text-xs text-nowrap"
+              [ngClass]="{
+            'bg-primary': event?.estado_id === 1,
+            'bg-success': event?.estado_id === 2,
+            'bg-info': event?.estado_id === 3,
+            'bg-error': event?.estado_id === 4,
+            'border-0 bg-gray-400': event?.estado_id === 5,
+          }"
+            >
+              {{ event.estado_nombre }}
+            </div>
+          </h2>
+
+          <!-- Categoría y estado -->
+          <h3 class="uppercase font-extrabold">{{ event.nombreCategoria }}</h3>
+
+          <!-- Descripción -->
+          <p>{{ event.descripcion }}</p>
+
+          <!-- Detalles del evento -->
+          <div
+            class="event-details collapse bg-base-100 border-base-300 border"
+          >
+            <input type="checkbox" />
+            <h4 class="collapse-title">🗿 Detalles del evento</h4>
+
+            <div class="collapse-content">
+              <p>
+                <span class="font-bold">🗓️ ¿Cuándo?: </span> Del
+                {{ event.fInicio }} al {{ event.fFin }}
+              </p>
+              <p>
+                <span class="font-semibold">Tope inscripción:</span>
+                {{ event.fTopeInscripcion }}
+              </p>
+              <p>
+                <span class="font-bold">📍 ¿Dónde? </span> {{ event.ubicacion }}
+              </p>
+              <p>
+                <span class="font-bold">🤑 Coste: </span>@if (event.coste) {
+                Tiene coste } @else { Gratuito }
+              </p>
+              <p>
+                <span class="font-bold">🧑‍🧑‍🧒‍🧒 Capacidad: </span>
+                {{ event.limiteUsuarios }} personas
+              </p>
+              <p>
+                <span class="font-bold">🎩 Código de vestimenta: </span
+                >{{ event.codigoVestimenta || "Libre" }}
+              </p>
+              <p>
+                <span class="font-bold">🔗 Link externo: </span>
+                @if (event.linkExterno) {
+                <a
+                  class="underline underline-offset-3 text-blue-900"
+                  href="{{ event.linkExterno }}"
+                >
+                  {{ event.linkExterno }}
+                </a>
+                } @else { "Sin link externo" }
+              </p>
+            </div>
+          </div>
+
+          <!-- Detalles del post (si no está pendiente) -->
+          <div
+            class="post-details collapse bg-base-100 border-base-300 border"
+            *ngIf="event.estado_nombre !== 'Pendiente'"
+          >
+            <input type="checkbox" />
+            <h4 class="collapse-title">🗣️ Detalles del post</h4>
+
+            <div class="collapse-content">
+              <!-- Likes / dislikes -->
+              <p>👍 {{ event.likes }} || 👎 {{ event.dislikes }}</p>
+
+              <!-- Usuarios inscritos -->
+              <div class="flex flex-row gap-2">
+                @if(event.usuarios && event.usuarios.length > 0) {
+                <p>Usuarios inscritos: {{ 0 }}</p>
+                <div *ngIf="event.usuarios && event.usuarios.length > 0">
+                  <ul class="menu bg-base-100 w-56 rounded-box">
+                    <li *ngFor="let usuario of event.usuarios">
+                      {{ usuario.username }}
+                    </li>
+                  </ul>
+                </div>
+                }
+              </div>
+
+              <!--  Usuarios seguidores -->
+              <div class="flex flex-row gap-2">
+                @if(event.usuarios && event.usuarios.length > 0) {
+                <p>Seguidores: {{ 0 }}</p>
+                <div *ngIf="event.seguidores && event.seguidores.length > 0">
+                  <ul class="menu bg-base-100 w-56 rounded-box">
+                    <li *ngFor="let usuario of event.seguidores">
+                      {{ usuario.username }}
+                    </li>
+                  </ul>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Usuario / Organización que ha creado el evento -->
+          <h4>
+            <span class="font-bold">🤠 Creador: </span>&#64;{{ event.userName }}
+          </h4>
+        </div>
+      </div>
+    </div>
+
+    }
+  </div>
+</section>

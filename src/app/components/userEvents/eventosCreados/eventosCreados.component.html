@@ -1,0 +1,273 @@
+<header class="flex justify-start p-5" [ngClass]="{ blured: nuevoEvento }">
+  <button
+    class="btn"
+    (click)="
+      nuevoEvento = true;
+      this.variablesCompartidas.modalCrearEventoActivo.set(this.nuevoEvento)
+    "
+  >
+    Nuevo evento
+  </button>
+</header>
+<form
+  [formGroup]="eventoForm"
+  (ngSubmit)="onSubmit()"
+  class="bg-base-200 m-5 z-50 w-xl rounded-lg h-[75vh] p-5 gap-5 flex-col justify-center items-center absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]"
+  [ngClass]="{ block: nuevoEvento, hidden: !nuevoEvento }"
+>
+  <div class="absolute top-2 right-4 rounded">
+    <fa-icon
+      [icon]="faXmark"
+      class="text-red-500 text-xl cursor-pointer"
+      (click)="
+        nuevoEvento = false;
+        this.variablesCompartidas.modalCrearEventoActivo.set(this.nuevoEvento)
+      "
+    ></fa-icon>
+  </div>
+  <div class="flex flex-col gap-3 overflow-y-scroll h-full p-3 mt-5">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Nombre del evento</legend>
+      <input
+        formControlName="name"
+        type="text"
+        class="input w-full"
+        placeholder="Recogida de basura en la playa..."
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Descripción</legend>
+      <input
+        formControlName="descripcion"
+        type="text"
+        class="input w-full"
+        placeholder="Evento social de recogida de basura..."
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Fecha de inicio</legend>
+      <input
+        type="datetime-local"
+        formControlName="fInicio"
+        class="input w-full"
+        placeholder="Fecha de inicio"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Fecha de fin</legend>
+      <input
+        type="datetime-local"
+        formControlName="fFin"
+        class="input w-full"
+        placeholder="Fecha de fin"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Fecha tope de inscripción</legend>
+      <input
+        type="datetime-local"
+        formControlName="fTopeInscripcion"
+        class="input w-full"
+        placeholder="Fecha tope de inscripción"
+      />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Categoría del evento</legend>
+      <select class="select py-2.5 w-full" formControlName="categoria_id">
+        <option [ngValue]="null" disabled>Categoría del evento</option>
+        @for (categoria of categorias; track categoria.id) {
+        <option [ngValue]="categoria.id">{{ categoria.name }}</option>
+        }
+      </select>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Código de vestimenta</legend>
+      <input
+        type="text"
+        formControlName="codigoVestimenta"
+        class="input w-full"
+        placeholder="codigo de vestimenta"
+      />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Límite de usuarios</legend>
+      <input
+        type="number"
+        formControlName="limiteUsuarios"
+        class="input w-full"
+        placeholder="Límite de usuarios"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">
+        Coste del evento (0) si es gratuito
+      </legend>
+      <input
+        type="number"
+        formControlName="coste"
+        class="input w-full"
+        placeholder="Coste del evento"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">
+        Link a página externa (dejar vacío si no tiene)
+      </legend>
+      <input
+        type="text"
+        formControlName="linkExterno"
+        class="input w-full"
+        placeholder="Link a página externa"
+      />
+    </fieldset>
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Ubicación del evento</legend>
+      <input
+        type="text"
+        formControlName="ubicacion"
+        class="input w-full"
+        placeholder="Ubicación del evento"
+      />
+    </fieldset>
+
+    <button type="submit" class="btn w-full bg-[#f44336]">Crear Evento</button>
+  </div>
+</form>
+
+<div
+  class="eventos-usuario flex flex-wrap justify-start gap-5 p-5"
+  [ngClass]="{ blured: nuevoEvento }"
+>
+  @for(event of eventosDeUsuario ; track event.id) {
+
+  <div class="card w-full md:w-96 bg-base-100 shadow-xl">
+    <!-- Tarjeta con los datos de la categoría -->
+    <div class="card bg-base-100 w-full md:w-96 shadow-sm">
+      <!-- Imagen -->
+      <figure [routerLink]="'/main/evento/' + event.id" class="cursor-pointer">
+        <img src="/ocio.png" alt="Foto de {{ event.name }}" />
+      </figure>
+
+      <!-- Contenido -->
+      <div class="card-body">
+        <!-- Título -->
+        <h2 class="card-title flex flex-row justify-between">
+          {{ event.name }}
+          <div
+            class="badge badge-lg outline-1 mt-2 font-bold text-xs text-nowrap"
+            [ngClass]="{
+            'bg-primary': event?.estado_id === 1,
+            'bg-success': event?.estado_id === 2,
+            'bg-info': event?.estado_id === 3,
+            'bg-error': event?.estado_id === 4,
+            'border-0 bg-gray-400': event?.estado_id === 5,
+          }"
+          >
+            {{ event.estado_nombre }}
+          </div>
+        </h2>
+
+        <!-- Categoría y estado -->
+        <h3 class="uppercase font-extrabold">{{ event.nombreCategoria }}</h3>
+
+        <!-- Descripción -->
+        <p>{{ event.descripcion }}</p>
+
+        <!-- Detalles del evento -->
+        <div class="event-details collapse bg-base-100 border-base-300 border">
+          <input type="checkbox" />
+          <h4 class="collapse-title">🗿 Detalles del evento</h4>
+
+          <div class="collapse-content">
+            <p>
+              <span class="font-bold">🗓️ ¿Cuándo?: </span> Del
+              {{ event.fInicio }} al {{ event.fFin }}
+            </p>
+            <p>
+              <span class="font-semibold">Tope inscripción:</span>
+              {{ event.fTopeInscripcion }}
+            </p>
+            <p>
+              <span class="font-bold">📍 ¿Dónde? </span> {{ event.ubicacion }}
+            </p>
+            <p>
+              <span class="font-bold">🤑 Coste: </span>@if (event.coste) { Tiene
+              coste } @else { Gratuito }
+            </p>
+            <p>
+              <span class="font-bold">🧑‍🧑‍🧒‍🧒 Capacidad: </span>
+              {{ event.limiteUsuarios }} personas
+            </p>
+            <p>
+              <span class="font-bold">🎩 Código de vestimenta: </span
+              >{{ event.codigoVestimenta || "Libre" }}
+            </p>
+            <p>
+              <span class="font-bold">🔗 Link externo: </span>
+              @if (event.linkExterno) {
+              <a
+                class="underline underline-offset-3 text-blue-900"
+                href="{{ event.linkExterno }}"
+              >
+                {{ event.linkExterno }}
+              </a>
+              } @else { "Sin link externo" }
+            </p>
+          </div>
+        </div>
+
+        <!-- Detalles del post (si no está pendiente) -->
+        <div
+          class="post-details collapse bg-base-100 border-base-300 border"
+          *ngIf="event.estado_nombre !== 'Pendiente'"
+        >
+          <input type="checkbox" />
+          <h4 class="collapse-title">🗣️ Detalles del post</h4>
+
+          <div class="collapse-content">
+            <!-- Likes / dislikes -->
+            <p>👍 {{ event.likes }} || 👎 {{ event.dislikes }}</p>
+
+            <!-- Usuarios inscritos -->
+            <div class="flex flex-row gap-2">
+              @if(event.usuarios && event.usuarios.length > 0) {
+              <p>Usuarios inscritos: {{ 0 }}</p>
+              <div *ngIf="event.usuarios && event.usuarios.length > 0">
+                <ul class="menu bg-base-100 w-56 rounded-box">
+                  <li *ngFor="let usuario of event.usuarios">
+                    {{ usuario.username }}
+                  </li>
+                </ul>
+              </div>
+              }
+            </div>
+
+            <!--  Usuarios seguidores -->
+            <div class="flex flex-row gap-2">
+              @if(event.usuarios && event.usuarios.length > 0) {
+              <p>Seguidores: {{ 0 }}</p>
+              <div *ngIf="event.seguidores && event.seguidores.length > 0">
+                <ul class="menu bg-base-100 w-56 rounded-box">
+                  <li *ngFor="let usuario of event.seguidores">
+                    {{ usuario.username }}
+                  </li>
+                </ul>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Usuario / Organización que ha creado el evento -->
+        <h4>
+          <span class="font-bold">🤠 Creador: </span>&#64;{{ event.userName }}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>

@@ -1,0 +1,105 @@
+<!-- Parte superior: Título, botón nueva categoría, formulario -->
+<div class="flex flex-col items-center text-center sm:flex-row sm:justify-between sm:items-center p-4">
+
+    <!-- Título -->
+    <h1 class="pb-2 text-xl sm:text-2xl font-bold text-base-content text-center w-full sm:text-left sm:w-auto">
+        Categorías de eventos
+    </h1>
+
+    <!-- Botón de crear nueva categoría y formulario -->
+    <div class="mt-2 sm:mt-0 flex justify-center w-full sm:w-auto sm:justify-end">
+        <!-- Botón -->
+        <button class="btn flex items-center border-0 py-1 sm:py-1 md:py-2 px-2 sm:px-3 md:px-4 bg-black text-white gap-1 md:gap-2 hover:bg-gray-900 shadow-lg rounded-full text-xs md:text-sm w-28 sm:w-auto" (click)="openModal()">
+
+            <!-- Icono -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                class="create-icon">
+                <circle cx="12" cy="12" r="9" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m4-4H8" />
+            </svg>
+
+            <!-- Texto -->
+            <p class="font-semibold text-[9px] sm:text-xs md:text-sm lg:text-base">Crear categoría</p>
+        </button>
+
+        <!-- Formulario modal -->
+        <dialog id="my_modal_1" class="modal">
+            <div class="modal-box w-11/12 max-w-md mx-auto px-3 py-4 sm:p-6">
+
+                <!-- Cambiar el título según si se está editando o creando categoría -->
+                <h2 class="text-base sm:text-lg font-bold text-center mb-4">
+                    <span *ngIf="!isEditing">Crear nueva categoría</span>
+                    <span *ngIf="isEditing">Editar categoría</span>
+                </h2>
+
+                <div class="flex modal-action w-full justify-center">
+                    <form class="w-full">
+                        <!-- Campos nombre y descripción -->
+                        <fieldset class="fieldset flex flex-col w-full rounded-box mb-4">
+                            <label class="label text-sm">Nombre</label>
+                            <input type="text" [(ngModel)]="newCategory.name" name="name"
+                                class="input input-sm sm:input-md bg-base-200 w-full" placeholder="Nombre de la categoría" required />
+
+                            <label class="label text-sm mt-2">Descripción</label>
+                            <input type="text" [(ngModel)]="newCategory.descripcion" name="description"
+                                class="input input-sm sm:input-md bg-base-200 w-full" placeholder="Descripción de la categoría" />
+                        </fieldset>
+
+                        <!-- Botones "Cerrar" y "Crear categoría" -->
+                        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3 sm:justify-end">
+                            <button class="btn btn-xs sm:btn-sm btn-ghost w-full sm:w-auto order-2 sm:order-1 h-8" (click)="closeModal()">Cerrar</button>
+                            <button class="btn btn-xs sm:btn-sm bg-black text-white w-full sm:w-auto order-1 sm:order-2 h-8" *ngIf="!isEditing" (click)="createCategory()">Crear categoría</button>
+                            <button class="btn btn-xs sm:btn-sm bg-black text-white w-full sm:w-auto order-1 sm:order-2 h-8" *ngIf="isEditing" (click)="updateCategory()">
+                                Editar categoría
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+        <!-- Fin Formulario modal -->
+
+    </div>
+</div>
+
+<!-- Parte inferior: listado de categorías -->
+<div class="overflow-x-auto rounded-box border border-base-content/5 m-4 container-tabla shadow-md">
+    <table class="table">
+        <!-- Table head -->
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Eventos</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <!-- Table body -->
+        <tbody>
+            <tr *ngFor="let category of categories" (click)="editCategory(category.id)">
+                <th>{{ category.id }}</th>
+                <td>{{ category.name }}</td>
+                <td>{{ category.descripcion }}</td>
+                <td>{{ category.eventos?.length }}</td>
+                <td class="flex gap-2 justify-end">
+
+                    <!-- Botón editar -->
+                    <button class="btn btn-xs btn-circle btn-warning shadow-md" (click)="editCategory(category.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 sm:size-4">
+                            <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
+                    </button>
+
+                    <!-- Botón borrar -->
+                    <button class="btn btn-xs btn-circle btn-error btn-ghost" (click)="deleteCategory(category.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 sm:size-4">
+                            <path d="M3 6h18M8 6V4h8v2M10 11v6M14 11v6M5 6l1 14h12l1-14"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

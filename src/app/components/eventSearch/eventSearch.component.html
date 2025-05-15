@@ -1,0 +1,97 @@
+<!-- <h1>Buscando eventos con nombre: {{ variablesCompartidas.inputContent() }}</h1> -->
+<div class="secciones flex flex-wrap w-full h-full gap-2 cursor-pointer">
+  @for (event of eventoService.eventosFiltrados(); track event.id) {
+  <div class="card w-96 bg-base-100 shadow-xl">
+    <!-- Tarjeta con los datos de la categoría -->
+    <div class="card bg-base-100 w-96 shadow-sm">
+      <!-- Imagen -->
+      <figure [routerLink]="['/main/evento/', event.id]">
+        <img src="/ocio.png" alt="Foto de {{ event.name }}" />
+      </figure>
+
+      <!-- Contenido -->
+      <div class="card-body">
+        <!-- Título -->
+        <h2 class="card-title">
+          {{ event.name }}
+          <!-- TODO: Mostrar la badge solo si el evento se creó hoy -->
+          <div class="badge badge-secondary">NEW</div>
+          <!-- *ngIf="event.fCreacion > ?? -->
+        </h2>
+
+        <!-- Categoría y estado -->
+        <h3>{{ event.nombreCategoria }} | {{ event.estado_nombre }}</h3>
+
+        <!-- Descripción -->
+        <p>{{ event.descripcion }}</p>
+
+        <!-- Usuario / Organización que ha creado el evento -->
+        <h4>🤠 Creador: {{ event.userName }}</h4>
+
+        <!-- Detalles del evento -->
+        <div class="event-details collapse bg-base-100 border-base-300 border">
+          <input type="checkbox" />
+          <h4 class="collapse-title">🗿 Detalles del evento</h4>
+
+          <div class="collapse-content">
+            <p>🗓️ ¿Cuándo? {{ event.fInicio }} {{ event.fFin }}</p>
+            <p>Tope inscripción: {{ event.fTopeInscripcion }}</p>
+            <p>📍 ¿Dónde? {{ event.ubicacion }}</p>
+            <p>🤑 Precio: {{ event.coste + "€" || "Gratis" }}</p>
+            <p>🧑‍🧑‍🧒‍🧒 Capacidad: {{ event.limiteUsuarios }}</p>
+            <p>
+              🎩 Código de vestimenta: {{ event.codigoVestimenta || "Libre" }}
+            </p>
+            <p>
+              🔗 Link externo: {{ event.linkExterno || "Sin link externo" }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Detalles del post (si no está pendiente) -->
+        <div
+          class="post-details collapse bg-base-100 border-base-300 border"
+          *ngIf="event.estado_nombre !== 'Pendiente'"
+        >
+          <input type="checkbox" />
+          <h4 class="collapse-title">🗣️ Detalles del post</h4>
+
+          <div class="collapse-content">
+            <!-- Likes / dislikes -->
+            <p>👍 {{ event.likes }} || 👎 {{ event.dislikes }}</p>
+
+            <!-- Usuarios inscritos -->
+            <div class="flex flex-row gap-2">
+              @if(event.usuarios && event.usuarios.length > 0) {
+              <p>Usuarios inscritos: {{ 0 }}</p>
+              <div *ngIf="event.usuarios && event.usuarios.length > 0">
+                <ul class="menu bg-base-100 w-56 rounded-box">
+                  <li *ngFor="let usuario of event.usuarios">
+                    {{ usuario.username }}
+                  </li>
+                </ul>
+              </div>
+              }
+            </div>
+
+            <!--  Usuarios seguidores -->
+            <div class="flex flex-row gap-2">
+              @if(event.usuarios && event.usuarios.length > 0) {
+              <p>Seguidores: {{ 0 }}</p>
+              <div *ngIf="event.seguidores && event.seguidores.length > 0">
+                <ul class="menu bg-base-100 w-56 rounded-box">
+                  <li *ngFor="let usuario of event.seguidores">
+                    {{ usuario.username }}
+                  </li>
+                </ul>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>

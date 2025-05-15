@@ -1,0 +1,216 @@
+<!-- Parte superior: Título y filtrar por -->
+<div class="flex flex-col p-4">
+  <!-- Título -->
+  <h1 class="pb-2 text-2xl font-bold text-base-content">
+    Próximos eventos
+
+    <!-- Botón de filtro -->
+    <button class="btn btn-link btn-ghost btn-circle" (click)="openFilter()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="feather feather-filter"
+      >
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+      </svg>
+    </button>
+  </h1>
+
+  <!-- Elegir filtro -->
+  <div class="flex flex-row gap-5" *ngIf="showFilter">
+    <h2>Filtrar por:</h2>
+
+    <div class="form-control flex gap-4">
+      <label class="cursor-pointer label">
+        <input
+          type="radio"
+          name="radio-10"
+          class="radio checked:bg-primary"
+          (click)="setFilterMode('all')"
+          checked
+        />
+        <span class="label-text">Todos </span>
+      </label>
+
+      <label class="cursor-pointer label">
+        <input
+          type="radio"
+          name="radio-10"
+          class="radio checked:bg-primary"
+          (click)="setFilterMode('pending')"
+        />
+        <span class="label-text">Pendientes de aprobar ⏳</span>
+      </label>
+
+      <label class="cursor-pointer label">
+        <input
+          type="radio"
+          name="radio-10"
+          class="radio checked:bg-primary"
+          (click)="setFilterMode('approved')"
+        />
+        <span class="label-text">Aprobados ✅</span>
+      </label>
+
+      <label class="cursor-pointer label">
+        <input
+          type="radio"
+          name="radio-10"
+          class="radio checked:bg-primary"
+          (click)="setFilterMode('category')"
+        />
+        <span class="label-text">Categorías 🏷️</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- Parte inferior: Eventos -->
+
+<!-- Si no hay eventos, mostrar mensaje -->
+<div
+  *ngIf="events.length === 0"
+  class="flex flex-col items-center justify-center h-100"
+>
+  <h2 class="text-2xl font-bold text-base-content">No hay eventos próximos</h2>
+  <p class="text-base-content">¡Pronto habrá más eventos!</p>
+</div>
+
+<!-- Container mostrar eventos -->
+<div class="w-full h-100" *ngIf="events && events.length > 0">
+  @switch (showMode) { @case ('all') {
+
+  <!-- Mostrar todos los eventos -->
+  <div class="p-4 flex flex-wrap w-full gap-5 cursor-pointer overflow-y-auto">
+    @for(event of events; track event.id) {
+    <div class="card w-full md:w-96 bg-base-100 shadow-xl">
+      <!-- Tarjeta con los datos de la categoría -->
+      <div class="card bg-base-100 w-full md:w-96 shadow-sm">
+        <!-- Imagen -->
+        <figure [routerLink]="['/main/evento/', event.id]">
+          <img src="/ocio.png" alt="Foto de {{ event.name }}" />
+        </figure>
+
+        <!-- Contenido -->
+        <div class="card-body">
+          <!-- Título -->
+          <h2 class="card-title">
+            {{ event.name }}
+            <!-- TODO: Mostrar la badge solo si el evento se creó hoy -->
+            <div class="badge badge-secondary">NEW</div>
+            <!-- *ngIf="event.fCreacion > ?? -->
+          </h2>
+
+          <!-- Categoría y estado -->
+          <h3>{{ event.nombreCategoria }} | {{ event.estado_nombre }}</h3>
+
+          <!-- Descripción -->
+          <p>{{ event.descripcion }}</p>
+
+          <!-- Usuario / Organización que ha creado el evento -->
+          <h4>🤠 Creador: {{ event.userName }}</h4>
+
+          <!-- Detalles del evento -->
+          <div
+            class="event-details collapse bg-base-100 border-base-300 border"
+          >
+            <input type="checkbox" />
+            <h4 class="collapse-title">🗿 Detalles del evento</h4>
+
+            <div class="collapse-content">
+              <p>🗓️ ¿Cuándo? {{ event.fInicio }} {{ event.fFin }}</p>
+              <p>Tope inscripción: {{ event.fTopeInscripcion }}</p>
+              <p>📍 ¿Dónde? {{ event.ubicacion }}</p>
+              <p>🤑 Coste: {{ event.coste + "€" || "Gratis" }}</p>
+              <p>🧑‍🧑‍🧒‍🧒 Capacidad: {{ event.limiteUsuarios }}</p>
+              <p>
+                🎩 Código de vestimenta: {{ event.codigoVestimenta || "Libre" }}
+              </p>
+              <p>
+                🔗 Link externo: {{ event.linkExterno || "Sin link externo" }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Detalles del post (si no está pendiente) -->
+          <div
+            class="post-details collapse bg-base-100 border-base-300 border"
+            *ngIf="event.estado_nombre !== 'Pendiente'"
+          >
+            <input type="checkbox" />
+            <h4 class="collapse-title">🗣️ Detalles del post</h4>
+
+            <div class="collapse-content">
+              <!-- Likes / dislikes -->
+              <p>👍 {{ event.likes }} || 👎 {{ event.dislikes }}</p>
+
+              <!-- Usuarios inscritos -->
+              <div class="flex flex-row gap-2">
+                @if(event.usuarios && event.usuarios.length > 0) {
+                <p>Usuarios inscritos: {{ 0 }}</p>
+                <div *ngIf="event.usuarios && event.usuarios.length > 0">
+                  <ul class="menu bg-base-100 w-56 rounded-box">
+                    <li *ngFor="let usuario of event.usuarios">
+                      {{ usuario.username }}
+                    </li>
+                  </ul>
+                </div>
+                }
+              </div>
+
+              <!--  Usuarios seguidores -->
+              <div class="flex flex-row gap-2">
+                @if(event.usuarios && event.usuarios.length > 0) {
+                <p>Seguidores: {{ 0 }}</p>
+                <div *ngIf="event.seguidores && event.seguidores.length > 0">
+                  <ul class="menu bg-base-100 w-56 rounded-box">
+                    <li *ngFor="let usuario of event.seguidores">
+                      {{ usuario.username }}
+                    </li>
+                  </ul>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer: Aprobar o denegar -->
+        <div class="card-actions justify-end">
+          <p>Creado: {{ event.fCreacion }}</p>
+
+          <!-- Denegar -->
+          <button class="btn btn-error" (click)="denegarEvento(event)">
+            Denegar
+          </button>
+
+          <!-- Aprobar -->
+          <button
+            class="btn btn-success"
+            (click)="aprobarEvento(event)"
+            *ngIf="event.estado_nombre === 'Pendiente'"
+          >
+            Aprobar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    }
+  </div>
+  } @case ('category') {
+
+  <!-- Mostrar los eventos agrupados por categorías -->
+
+  <!-- Mostrar los eventos pendientes de aprobación -->
+  } @case ('pending') {
+
+  <!-- Mostrar los eventos aprobados -->
+  } @case ('approved') { } }
+</div>

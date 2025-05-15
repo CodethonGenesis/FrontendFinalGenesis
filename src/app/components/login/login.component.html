@@ -1,0 +1,42 @@
+<body>
+  <form
+    (ngSubmit)="onSubmit()"
+    class="p-5 rounded-xl bg-white flex flex-col gap-4 shadow-md border-1 border-gray-200"
+  >
+    <input
+      name="username"
+      placeholder="Usuario"
+      [(ngModel)]="user.username"
+      required
+      class="input border rounded-md border-gray-300"
+    />
+    <input
+      class="input border rounded-md border-gray-300"
+      name="password"
+      placeholder="Contraseña"
+      type="password"
+      [(ngModel)]="user.password"
+      required
+    />
+
+    <button class="btn border rounded-md border-gray-300" type="submit">
+      Login
+    </button>
+    <span class="self-center font-thin">
+      Todavía no tienes cuenta?
+      <a
+        class="self-center font-normal"
+        [routerLink]="['/register']"
+        routerLinkActive="router-link-active"
+        >Registrarse</a
+      >
+    </span>
+      <a
+      [routerLink]="['/passwordRecovery']"
+      class="text-xs text-center hover:text-zinc-500"
+    >
+      ¿Has olvidado tu contraseña?</a
+    >
+
+  </form>
+</body>

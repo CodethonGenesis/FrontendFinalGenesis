@@ -1,0 +1,26 @@
+#modal {
+  top: 15%;
+  left: 5%;
+  width: 90%;
+  height: 70dvh;
+  position: absolute;
+  border: 1px solid red;
+  padding: 2%;
+  z-index: 1;
+}
+
+full-calendar {
+  margin: 0 auto;
+  width: 100dvh;
+  position: relative;
+  height: auto;
+}
+
+@media (width <= 768px) {
+  full-calendar {
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    height: 100%;
+  }
+}

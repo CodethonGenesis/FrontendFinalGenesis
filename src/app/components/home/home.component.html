@@ -1,0 +1,123 @@
+<div class="home-container">
+  <div class="left-side">
+    <div class="page-layout">
+      <!-- Columna izquierda con categorías -->
+      <div class="left-column rounded-xl">
+        <!-- Sección de Categorías -->
+
+        <div
+          class="categories flex flex-col h-[92dvh] gap-4 p-5"
+          style="
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          "
+        >
+          <h2 class="text-3xl text-center font-bold">¡Bienvenido!</h2>
+          <small class="text-center text-[14px]"
+            >Descubre nuestros eventos</small
+          >
+          <app-event-slider class="hidden lg:block"></app-event-slider>
+          @for (categoria of categories; track categoria.id) {
+          <div
+            class="category-card p-5 bg-base-100 shadow rounded-[8px] flex flex-col gap-4"
+          >
+            <h3 class="font-bold">{{ categoria.name }}</h3>
+            <button
+              class="btn w-fit bg-base-content text-base-200"
+              [routerLink]="'/main/seccion/' + categoria.id"
+            >
+              Ver categoría
+            </button>
+
+            <div class="rounded-lg">
+              <div class="eventos-categoria flex overflow-x-auto gap-4 pb-2">
+                @for(evento of categoria.eventosCompletos; track evento.id) {
+                <div
+                  class="event-card lg:w-65 flex-shrink-0 rounded-lg overflow-hidden shadow-md bg-base-200"
+                >
+                  <div class="relative">
+                    <img
+                      src="./event.jpg"
+                      class="w-full h-36 object-cover"
+                      alt="{{ evento.name }}"
+                    />
+                    <div
+                      class="badge absolute bottom-2 left-2 badge-sm outline-1 md:mt-2 font-bold text-nowrap"
+                      [ngClass]="{
+                'bg-primary': evento?.estado_id === 1,
+                'bg-success': evento?.estado_id === 2,
+                'bg-info': evento?.estado_id === 3,
+                'bg-error': evento?.estado_id === 4,
+                'border-0 bg-gray-400': evento?.estado_id === 5,
+              }"
+                    >
+                      {{ evento?.estado_nombre || "" }}
+                    </div>
+                    <div
+                      class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded"
+                    >
+                      {{ evento.seguidores?.length || "0" }} seguidores
+                    </div>
+                  </div>
+
+                  <div class="p-3">
+                    <h4 class="font-bold text-lg truncate">
+                      {{ evento.name }}
+                    </h4>
+
+                    <div class="flex justify-between items-center mt-3">
+                      <span>
+                        {{ evento.descripcion }}
+                      </span>
+                      <button
+                        class="btn btn-sm bg-primary text-primary-content"
+                        [routerLink]="'/main/evento/' + evento.id"
+                      >
+                        Ver más
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="right-column">
+        <calendar-date
+          class="cally bg-base-200 border border-base-300 shadow-lg rounded-box"
+        >
+          <svg
+            aria-label="Previous"
+            class="fill-current text-base-content size-4"
+            slot="previous"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path fill="currentColor" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+          </svg>
+          <svg
+            aria-label="Next"
+            class="fill-current text-base-content size-4"
+            slot="next"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+          </svg>
+          <calendar-month></calendar-month>
+          <div class="flex w-full justify-between px-2">
+            ¡Hoy tienes 2 eventos!
+            <a [routerLink]="'/main/calendar'" class="link link-primary"
+              >Ver eventos</a
+            >
+          </div>
+        </calendar-date>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div
+  class="selector"
+  [ngClass]="{ blured: this.variablesCompartidas.modalCrearEventoActivo() }"
+>
+  <ul
+    class="flex gap-2 mb-4 p-1 glass items-center w-fit"
+    [ngClass]="{ selected: !favoritos }"
+  >
+    <li
+      class="p-3 rounded-2xl cursor-pointer"
+      [ngClass]="{ 'text-base-200': favoritos }"
+      (click)="favoritos = true"
+      [routerLink]="['/main/misEventos/misEventosCreados']"
+    >
+      Favoritos
+    </li>
+    <li
+      class="p-3 rounded-2xl cursor-pointer"
+      [ngClass]="{ ' text-base-200': !favoritos }"
+      (click)="favoritos = false"
+      [routerLink]="['/main/misEventos/misEventosCreados']"
+    >
+      Mis eventos creados
+    </li>
+  </ul>
+</div>
+
+<main>
+  <router-outlet class="relative"></router-outlet>
+</main>

@@ -1,0 +1,47 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{html,ts}'],
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          'base-100': '#ffffff',
+          'base-200': '#f5f5f5',
+          'base-300': '#e0e0e0',
+          'base-content': '#000000',
+          primary: '#ff6f61',
+          'primary-content': '#ffffff',
+          secondary: '#ffd700',
+          'secondary-content': '#000000',
+          accent: '#4caf50',
+          'accent-content': '#ffffff',
+          neutral: '#f5f5f5',
+          'neutral-content': '#000000',
+          info: '#2196f3',
+          success: '#4caf50',
+          warning: '#ffc107',
+          error: '#f44336',
+        },
+        dark: {
+          'base-100': '#121212',
+          'base-200': '#1e1e1e',
+          'base-300': '#2c2c2c',
+          'base-content': '#ffffff',
+          primary: '#ff6f61',
+          'primary-content': '#ffffff',
+          secondary: '#ffd700',
+          'secondary-content': '#000000',
+          accent: '#4caf50',
+          'accent-content': '#ffffff',
+          neutral: '#1e1e1e',
+          'neutral-content': '#ffffff',
+          info: '#2196f3',
+          success: '#4caf50',
+          warning: '#ffc107',
+          error: '#f44336',
+        },
+      },
+    ],
+  },
+};

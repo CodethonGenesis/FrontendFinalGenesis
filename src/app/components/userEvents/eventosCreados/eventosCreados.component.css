@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+form::-webkit-scrollbar-track,
+form::-webkit-scrollbar {
+  display: none;
+}
+

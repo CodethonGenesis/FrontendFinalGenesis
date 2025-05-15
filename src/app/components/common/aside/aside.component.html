@@ -1,0 +1,113 @@
+<!-- Mobile header -->
+<div class="mobile-header" [class.sidebar-open]="sidebarOpen">
+  <div class="mobile-logo">
+    <div class="logo-circle">
+      <img src="./favicon.ico" alt="Logo Genesis" />
+    </div>
+    <span>Genesis</span>
+  </div>
+  <div class="mobile-actions">
+    <button class="mobile-action-btn theme-toggle" (click)="toggleTheme()">
+      <fa-icon
+        [icon]="isDarkTheme ? faSun : faMoon"
+        [fixedWidth]="true"
+      ></fa-icon>
+    </button>
+    <button class="mobile-action-btn menu-toggle" (click)="toggleSidebar()">
+      <fa-icon [icon]="faBars" [fixedWidth]="true"></fa-icon>
+    </button>
+  </div>
+</div>
+
+<!-- Overlay para cerrar el sidebar en móvil -->
+<div
+  class="sidebar-overlay"
+  [class.visible]="sidebarOpen"
+  (click)="toggleSidebar()"
+></div>
+
+<!-- Sidebar principal -->
+<div
+  #sideMenu
+  id="aside-menu"
+  class="aside-menu blurbg"
+  [class.sidebar-open]="sidebarOpen"
+>
+  <div class="aside-container">
+    <div class="logo-container">
+      <div class="logo-circle">
+        <img src="./favicon.ico" alt="Logo Genesis" />
+      </div>
+      <div class="logo-text">Genesis</div>
+    </div>
+    <div class="divider"></div>
+    <div class="search-container">
+      <fa-icon [icon]="faSearch" [fixedWidth]="true"></fa-icon>
+      <div #search class="search-input-container">
+        <input
+          #search
+          type="text"
+          placeholder="Search..."
+          class="search-input"
+          (keyup)="searchEvent($event)"
+        />
+        <fa-icon
+          [icon]="faXmark"
+          (click)="clearInput()"
+          [fixedWidth]="true"
+        ></fa-icon>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <nav class="nav-menu">
+      <button
+        *ngFor="let item of asideItems"
+        class="nav-button"
+        [routerLink]="item.route"
+        (click)="sidebarOpen = false"
+      >
+        <fa-icon [icon]="item.icon" [fixedWidth]="true"></fa-icon>
+        <span>{{ item.text }}</span>
+      </button>
+      @if(this.rol[0] === 1) {
+      <button class="nav-button" routerLink="/main/admin-panel">
+        <fa-icon [icon]="faDev" [fixedWidth]="true"></fa-icon>
+        <span> AdminPanel </span>
+      </button>
+      }
+    </nav>
+    <div class="divider nav-divider"></div>
+    <div class="settings-container">
+      <button class="nav-button settings-button" routerLink="/main/ajustes">
+        <fa-icon [icon]="faCog" [fixedWidth]="true"></fa-icon>
+        <span>Settings</span>
+      </button>
+    </div>
+    <div class="divider settings-divider"></div>
+  </div>
+
+  <div class="aside-bottom-container">
+    <button class="nav-button theme-button" (click)="toggleTheme()">
+      <fa-icon
+        [icon]="isDarkTheme ? faSun : faMoon"
+        [fixedWidth]="true"
+      ></fa-icon>
+      <span>Dark Mode</span>
+    </button>
+    <button class="nav-button profile-button">
+      <div #card class="user-circle">
+        <img src="./avatar.png" alt="Foto de perfil" />
+      </div>
+      <span>Perfil</span>
+    </button>
+    <button class="nav-button logout-button" (click)="logout()">
+      <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
+      <span>LogOut</span>
+    </button>
+  </div>
+
+  <!-- Botón para cerrar en móvil -->
+  <button class="close-mobile-sidebar">
+    <fa-icon [icon]="faXmark" [fixedWidth]="true"></fa-icon>
+  </button>
+</div>
